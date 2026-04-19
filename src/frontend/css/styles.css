@@ -1,0 +1,12 @@
+body {
+  background: #f5f7fb;
+}
+
+.box code {
+  color: #485fc7;
+}
+
+#applications .card,
+#contracts .card {
+  margin-bottom: 0.75rem;
+}
