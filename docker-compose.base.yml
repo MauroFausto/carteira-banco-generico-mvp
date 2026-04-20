@@ -1,0 +1,41 @@
+services:
+  loki:
+    image: grafana/loki:2.9.8
+    container_name: carteira-loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./ops/loki/local-config.yaml:/etc/loki/local-config.yaml:ro
+      - loki-data:/loki
+    networks:
+      - rede-observabilidade
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    container_name: carteira-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+    ports:
+      - "3000:3000"
+    depends_on:
+      loki:
+        condition: service_started
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./ops/grafana/provisioning/datasources/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml:ro
+    networks:
+      - rede-observabilidade
+
+volumes:
+  loki-data:
+  grafana-data:
+
+networks:
+  rede-app:
+    name: carteira-rede-app
+  rede-observabilidade:
+    name: carteira-rede-observabilidade

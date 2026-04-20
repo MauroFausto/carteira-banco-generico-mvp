@@ -1,0 +1,248 @@
+services:
+  auth-app:
+    build:
+      context: ./src/backend/CarteiraBank.Api
+      dockerfile: Dockerfile
+    container_name: carteira-auth-app
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS:-http://+:8080}
+      UseInMemoryDatabase: "${USE_INMEMORY_DATABASE:-false}"
+      ConnectionStrings__DefaultConnection: Host=pgsql-auth;Port=5432;Database=${PGSQL_AUTH_DB:-carteira_auth};Username=${PGSQL_USER:-postgres};Password=${PGSQL_PASSWORD:-postgres}
+      Serilog__WriteTo__1__Args__uri: ${LOKI_URI:-http://loki:3100}
+      Modulo__Nome: Auth
+    depends_on:
+      pgsql-auth:
+        condition: service_healthy
+    networks:
+      - rede-app
+      - rede-observabilidade
+
+  credito-app:
+    build:
+      context: ./src/backend/CarteiraBank.Api
+      dockerfile: Dockerfile
+    container_name: carteira-credito-app
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS:-http://+:8080}
+      UseInMemoryDatabase: "${USE_INMEMORY_DATABASE:-false}"
+      ConnectionStrings__DefaultConnection: Host=pgsql-credito;Port=5432;Database=${PGSQL_CREDITO_DB:-carteira_credito};Username=${PGSQL_USER:-postgres};Password=${PGSQL_PASSWORD:-postgres}
+      Serilog__WriteTo__1__Args__uri: ${LOKI_URI:-http://loki:3100}
+      Modulo__Nome: Credito
+    depends_on:
+      pgsql-credito:
+        condition: service_healthy
+    networks:
+      - rede-app
+      - rede-observabilidade
+
+  divida-app:
+    build:
+      context: ./src/backend/CarteiraBank.Api
+      dockerfile: Dockerfile
+    container_name: carteira-divida-app
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS:-http://+:8080}
+      UseInMemoryDatabase: "${USE_INMEMORY_DATABASE:-false}"
+      ConnectionStrings__DefaultConnection: Host=pgsql-divida;Port=5432;Database=${PGSQL_DIVIDA_DB:-carteira_divida};Username=${PGSQL_USER:-postgres};Password=${PGSQL_PASSWORD:-postgres}
+      Serilog__WriteTo__1__Args__uri: ${LOKI_URI:-http://loki:3100}
+      Modulo__Nome: Divida
+    depends_on:
+      pgsql-divida:
+        condition: service_healthy
+    networks:
+      - rede-app
+      - rede-observabilidade
+
+  acordo-app:
+    build:
+      context: ./src/backend/CarteiraBank.Api
+      dockerfile: Dockerfile
+    container_name: carteira-acordo-app
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS:-http://+:8080}
+      UseInMemoryDatabase: "${USE_INMEMORY_DATABASE:-false}"
+      ConnectionStrings__DefaultConnection: Host=pgsql-acordo;Port=5432;Database=${PGSQL_ACORDO_DB:-carteira_acordo};Username=${PGSQL_USER:-postgres};Password=${PGSQL_PASSWORD:-postgres}
+      Serilog__WriteTo__1__Args__uri: ${LOKI_URI:-http://loki:3100}
+      Modulo__Nome: Acordo
+    depends_on:
+      pgsql-acordo:
+        condition: service_healthy
+    networks:
+      - rede-app
+      - rede-observabilidade
+
+  boleto-app:
+    build:
+      context: ./src/backend/CarteiraBank.Api
+      dockerfile: Dockerfile
+    container_name: carteira-boleto-app
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS:-http://+:8080}
+      UseInMemoryDatabase: "${USE_INMEMORY_DATABASE:-false}"
+      ConnectionStrings__DefaultConnection: Host=pgsql-boleto;Port=5432;Database=${PGSQL_BOLETO_DB:-carteira_boleto};Username=${PGSQL_USER:-postgres};Password=${PGSQL_PASSWORD:-postgres}
+      Serilog__WriteTo__1__Args__uri: ${LOKI_URI:-http://loki:3100}
+      Modulo__Nome: Boleto
+    depends_on:
+      pgsql-boleto:
+        condition: service_healthy
+    networks:
+      - rede-app
+      - rede-observabilidade
+
+  frontend-app:
+    build:
+      context: ./src/backend/CarteiraBank.Api
+      dockerfile: Dockerfile
+    container_name: carteira-frontend-app
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS:-http://+:8080}
+      UseInMemoryDatabase: "${USE_INMEMORY_DATABASE:-false}"
+      ConnectionStrings__DefaultConnection: Host=pgsql-frontend;Port=5432;Database=${PGSQL_FRONTEND_DB:-carteira_frontend};Username=${PGSQL_USER:-postgres};Password=${PGSQL_PASSWORD:-postgres}
+      Serilog__WriteTo__1__Args__uri: ${LOKI_URI:-http://loki:3100}
+      Modulo__Nome: Frontend
+    depends_on:
+      pgsql-frontend:
+        condition: service_healthy
+    networks:
+      - rede-app
+      - rede-observabilidade
+
+  pgsql-auth:
+    image: postgres:18.3
+    container_name: carteira-pgsql-auth
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGSQL_USER:-postgres}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-postgres}
+      POSTGRES_DB: ${PGSQL_AUTH_DB:-carteira_auth}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER:-postgres} -d ${PGSQL_AUTH_DB:-carteira_auth}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pgsql-auth-data:/var/lib/postgresql
+    networks:
+      - rede-app
+
+  pgsql-credito:
+    image: postgres:18.3
+    container_name: carteira-pgsql-credito
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGSQL_USER:-postgres}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-postgres}
+      POSTGRES_DB: ${PGSQL_CREDITO_DB:-carteira_credito}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER:-postgres} -d ${PGSQL_CREDITO_DB:-carteira_credito}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pgsql-credito-data:/var/lib/postgresql
+    networks:
+      - rede-app
+
+  pgsql-divida:
+    image: postgres:18.3
+    container_name: carteira-pgsql-divida
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGSQL_USER:-postgres}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-postgres}
+      POSTGRES_DB: ${PGSQL_DIVIDA_DB:-carteira_divida}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER:-postgres} -d ${PGSQL_DIVIDA_DB:-carteira_divida}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pgsql-divida-data:/var/lib/postgresql
+    networks:
+      - rede-app
+
+  pgsql-acordo:
+    image: postgres:18.3
+    container_name: carteira-pgsql-acordo
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGSQL_USER:-postgres}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-postgres}
+      POSTGRES_DB: ${PGSQL_ACORDO_DB:-carteira_acordo}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER:-postgres} -d ${PGSQL_ACORDO_DB:-carteira_acordo}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pgsql-acordo-data:/var/lib/postgresql
+    networks:
+      - rede-app
+
+  pgsql-boleto:
+    image: postgres:18.3
+    container_name: carteira-pgsql-boleto
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGSQL_USER:-postgres}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-postgres}
+      POSTGRES_DB: ${PGSQL_BOLETO_DB:-carteira_boleto}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER:-postgres} -d ${PGSQL_BOLETO_DB:-carteira_boleto}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pgsql-boleto-data:/var/lib/postgresql
+    networks:
+      - rede-app
+
+  pgsql-frontend:
+    image: postgres:18.3
+    container_name: carteira-pgsql-frontend
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGSQL_USER:-postgres}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD:-postgres}
+      POSTGRES_DB: ${PGSQL_FRONTEND_DB:-carteira_frontend}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGSQL_USER:-postgres} -d ${PGSQL_FRONTEND_DB:-carteira_frontend}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    volumes:
+      - pgsql-frontend-data:/var/lib/postgresql
+    networks:
+      - rede-app
+
+volumes:
+  pgsql-auth-data:
+  pgsql-credito-data:
+  pgsql-divida-data:
+  pgsql-acordo-data:
+  pgsql-boleto-data:
+  pgsql-frontend-data:
+
+networks:
+  rede-app:
+    name: carteira-rede-app
+  rede-observabilidade:
+    name: carteira-rede-observabilidade
