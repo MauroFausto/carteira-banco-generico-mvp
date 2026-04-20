@@ -553,3 +553,5 @@ static byte[] GerarPdfSimples(string mensagem)
               """;
     return Encoding.ASCII.GetBytes(pdf);
 }
+
+public partial class Program;

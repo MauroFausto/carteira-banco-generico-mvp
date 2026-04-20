@@ -55,3 +55,33 @@ cz bump
 ```
 
 Configuracao do projeto: `.cz.toml`.
+
+## 6) Checkpoint de versionamento por etapa
+
+No fechamento de cada etapa:
+
+1. Validar somente o escopo da etapa no diff:
+
+```bash
+git status --short
+git diff --name-only
+```
+
+2. Rodar validacoes tecnicas minimas da etapa:
+
+```bash
+./ops/scripts/run-local-gates.sh
+```
+
+3. Criar commit pequeno e objetivo com Conventional Commit:
+
+```bash
+git add <arquivos-da-etapa>
+cz commit
+```
+
+4. Confirmar arvore limpa apos commit:
+
+```bash
+git status --short
+```

@@ -126,7 +126,9 @@ Arquivos prontos:
 - `postman/CarteiraBank-MVP.postman_collection.json`
 - `postman/CarteiraBank-MVP.local.postman_environment.json`
 
-## 5) Orquestracao local: Grafana + Loki + Modulo da Aplicacao + PGSQL dedicado
+## 5) Orquestracao local
+
+### 5.1 Stack base (modulo unico atual)
 
 Foi adicionada uma stack de orquestracao para execucao local do modulo atual em:
 - `docker-compose.modulo.yml`
@@ -135,13 +137,13 @@ Arquivos de apoio:
 - `ops/loki/local-config.yaml`
 - `ops/grafana/provisioning/datasources/datasource.yml`
 
-### 5.1 Subir a stack
+Subir:
 
 ```bash
 docker compose -f docker-compose.modulo.yml up -d --build
 ```
 
-### 5.2 Servicos expostos
+Servicos expostos:
 
 - Aplicacao (modulo): `http://localhost:5099`
 - Health API: `http://localhost:5099/api/health`
@@ -149,7 +151,7 @@ docker compose -f docker-compose.modulo.yml up -d --build
 - Loki: `http://localhost:3100`
 - Grafana: `http://localhost:3000` (usuario `admin`, senha `admin`)
 
-### 5.3 Logs centralizados no Grafana
+Logs centralizados no Grafana:
 
 1. Acesse o Grafana.
 2. Abra **Explore**.
@@ -160,7 +162,7 @@ docker compose -f docker-compose.modulo.yml up -d --build
 {app="carteira-bank-api"}
 ```
 
-### 5.4 Derrubar a stack
+Derrubar:
 
 ```bash
 docker compose -f docker-compose.modulo.yml down
@@ -172,7 +174,69 @@ Para remover tambem os volumes persistentes:
 docker compose -f docker-compose.modulo.yml down -v
 ```
 
-## 6) Fluxo de versionamento (Git)
+### 5.2 Stack multi-modulo (nova topologia)
+
+Arquivos da nova organizacao:
+- `docker-compose.base.yml` (observabilidade e redes)
+- `docker-compose.modulos.yml` (servicos `auth`, `credito`, `divida`, `acordo`, `boleto`, `frontend` e seus bancos)
+- `docker-compose.override.yml` (portas locais por servico)
+- `.env.example` (variaveis de ambiente base)
+
+Subir topologia multi-modulo:
+
+```bash
+docker compose \
+  -f docker-compose.base.yml \
+  -f docker-compose.modulos.yml \
+  -f docker-compose.override.yml \
+  --env-file .env.example \
+  up -d --build
+```
+
+Derrubar topologia multi-modulo:
+
+```bash
+docker compose \
+  -f docker-compose.base.yml \
+  -f docker-compose.modulos.yml \
+  -f docker-compose.override.yml \
+  --env-file .env.example \
+  down
+```
+
+## 6) Gates locais de seguranca e qualidade
+
+Scripts adicionados:
+- `ops/scripts/secret-scan-staged.sh` (strict-block de segredos no staged diff)
+- `ops/scripts/check-dotnet.sh` (restore/build/test)
+- `ops/scripts/run-local-gates.sh` (orquestrador local)
+
+Hook local:
+- `.githooks/pre-commit`
+
+Ativar hook no seu clone:
+
+```bash
+ln -sf ../../.githooks/pre-commit .git/hooks/pre-commit
+```
+
+Rodar manualmente os gates:
+
+```bash
+./ops/scripts/run-local-gates.sh
+```
+
+## 7) CI com bloqueio estrito de segredos
+
+Workflow:
+- `.github/workflows/ci.yml`
+
+Comportamento:
+- executa restore/build/test da API;
+- executa secret scan em modo strict-block;
+- falha o pipeline ao detectar segredos.
+
+## 8) Fluxo de versionamento (Git)
 
 O projeto passa a seguir:
 - Trunk-based com branch principal `master`;

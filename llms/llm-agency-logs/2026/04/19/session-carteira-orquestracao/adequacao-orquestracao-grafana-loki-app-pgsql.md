@@ -33,3 +33,25 @@ Foram definidos volumes nomeados para persistencia de dados de PostgreSQL, Loki 
 - Criado `docs/versionamento-git.md`;
 - Atualizado `README.md` com secao de fluxo Git;
 - Atualizado `TODOs.md` com checkpoint de versionamento.
+
+## 2026-04-19 - 22:55
+- Implementacao da topologia Docker multi-modulo em camadas com arquivos dedicados para base, modulos e override local;
+- Inclusao de `.env.example` para padronizar configuracao local sem versionar segredos reais;
+- Inclusao de scripts de gates locais (secret scan strict-block, build e testes) e hook de `pre-commit`;
+- Inclusao de workflow de CI no GitHub Actions com build/test e secret scan;
+- Endurecimento de log de erros com sanitizacao de query string, token e identificadores sensiveis;
+- Criacao de projeto de testes automatizados para cobrir sanitizacao anti-vazamento;
+- Atualizacao de documentacao (`README.md`, `docs/versionamento-git.md`, `TODOs.md`) com checkpoints operacionais por etapa.
+
+--- TimeLine das mudancas no codigo/documentos ---
+- Criado `.env.example`;
+- Criado `docker-compose.base.yml`;
+- Criado `docker-compose.modulos.yml`;
+- Criado `docker-compose.override.yml`;
+- Criados `ops/scripts/check-dotnet.sh`, `ops/scripts/secret-scan-staged.sh`, `ops/scripts/run-local-gates.sh`;
+- Criado `.githooks/pre-commit`;
+- Criado `.gitleaks.toml`;
+- Criado `.github/workflows/ci.yml`;
+- Criado projeto de testes `src/backend/CarteiraBank.Api.Tests/` e testes de sanitizacao;
+- Criado `SanitizadorDadosSensiveis` e aplicado no `MiddlewareExcecaoGlobal`;
+- Atualizados `README.md`, `docs/versionamento-git.md` e `TODOs.md`.

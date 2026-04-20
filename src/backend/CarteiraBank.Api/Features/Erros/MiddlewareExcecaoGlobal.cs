@@ -43,12 +43,14 @@ public sealed class MiddlewareExcecaoGlobal(RequestDelegate next, ILogger<Middle
         catch (Exception ex)
         {
             var traceId = Activity.Current?.TraceId.ToString() ?? context.TraceIdentifier;
+            var querySanitizada = SanitizadorDadosSensiveis.SanitizarQueryString(context.Request.QueryString.ToString());
+            var usuarioSanitizado = SanitizadorDadosSensiveis.SanitizarUsuario(context.User?.Identity?.Name);
             logger.LogError(ex,
                 "Erro interno nao tratado. Metodo={Metodo} Caminho={Caminho} Query={Query} Usuario={Usuario} TraceId={TraceId}",
                 context.Request.Method,
                 context.Request.Path,
-                context.Request.QueryString.ToString(),
-                context.User?.Identity?.Name ?? "anonimo",
+                querySanitizada,
+                usuarioSanitizado,
                 traceId);
 
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;

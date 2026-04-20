@@ -4,6 +4,18 @@
   - 1 container de aplicacao por modulo (`Auth`, `Credito`, `Divida`, `Acordo`, `Boleto`, `Frontend`);
   - 1 instancia Grafana + Loki para centralizacao de logs;
   - 1 container PostgreSQL por modulo (isolamento de dados).
+- [x] Definir topologia em camadas de compose para orquestracao multi-modulo:
+  - `docker-compose.base.yml`;
+  - `docker-compose.modulos.yml`;
+  - `docker-compose.override.yml`.
+- [x] Criar `.env.example` com configuracao base para stack multi-modulo.
+- [x] Adicionar gates locais de seguranca/qualidade:
+  - hook de `pre-commit`;
+  - secret scan strict-block;
+  - build/test local automatizado.
+- [x] Adicionar CI (`.github/workflows/ci.yml`) com build/test e secret scan strict-block.
+- [x] Adicionar testes de seguranca para sanitizacao de dados sensiveis em logs.
+- [x] Definir checkpoint de versionamento por etapa no guia de Git.
 - [x] Definir estrategia de versionamento Git para o projeto:
   - trunk-based com `master` como trunk;
   - uso de Conventional Commits.
@@ -17,5 +29,5 @@
   - redes: `carteira-rede-app` e `carteira-rede-observabilidade`;
   - servicos: `modulo-app`, `pgsql-modulo`, `loki`, `grafana`;
   - volumes: `pgsql-modulo-data`, `loki-data`, `grafana-data`.
-- [ ] Evoluir para topologia por multiplos modulos (`Auth`, `Credito`, `Divida`, `Acordo`, `Boleto`, `Frontend`) com isolamento de banco por modulo.
+- [x] Evoluir para topologia por multiplos modulos (`Auth`, `Credito`, `Divida`, `Acordo`, `Boleto`, `Frontend`) com isolamento de banco por modulo.
 - [ ] Definir politica de backup/restore para os volumes de PostgreSQL e observabilidade.
