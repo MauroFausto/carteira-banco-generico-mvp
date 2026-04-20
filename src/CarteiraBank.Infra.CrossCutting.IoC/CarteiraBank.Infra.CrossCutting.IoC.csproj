@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\CarteiraBank.Application\CarteiraBank.Application.csproj" />
+    <ProjectReference Include="..\CarteiraBank.Domain\CarteiraBank.Domain.csproj" />
+    <ProjectReference Include="..\CarteiraBank.Infra.Data\CarteiraBank.Infra.Data.csproj" />
+    <ProjectReference Include="..\CarteiraBank.Infra.CrossCutting.Bus\CarteiraBank.Infra.CrossCutting.Bus.csproj" />
+    <ProjectReference Include="..\CarteiraBank.Infra.CrossCutting.Identity\CarteiraBank.Infra.CrossCutting.Identity.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.6" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

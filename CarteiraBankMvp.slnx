@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CarteiraBank.Application/CarteiraBank.Application.csproj" />
+    <Project Path="src/CarteiraBank.Domain.Core/CarteiraBank.Domain.Core.csproj" />
+    <Project Path="src/CarteiraBank.Domain/CarteiraBank.Domain.csproj" />
+    <Project Path="src/CarteiraBank.Infra.CrossCutting.Bus/CarteiraBank.Infra.CrossCutting.Bus.csproj" />
+    <Project Path="src/CarteiraBank.Infra.CrossCutting.Identity/CarteiraBank.Infra.CrossCutting.Identity.csproj" />
+    <Project Path="src/CarteiraBank.Infra.CrossCutting.IoC/CarteiraBank.Infra.CrossCutting.IoC.csproj" />
+    <Project Path="src/CarteiraBank.Infra.Data/CarteiraBank.Infra.Data.csproj" />
+    <Project Path="src/CarteiraBank.Services.Api/CarteiraBank.Services.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CarteiraBank.Tests.Architecture/CarteiraBank.Tests.Architecture.csproj" />
+    <Project Path="tests/CarteiraBank.Tests.Unit/CarteiraBank.Tests.Unit.csproj" />
+  </Folder>
+</Solution>

@@ -1,7 +1,7 @@
 services:
   auth-app:
     build:
-      context: ./src/backend/CarteiraBank.Api
+      context: ./src/CarteiraBank.Services.Api
       dockerfile: Dockerfile
     container_name: carteira-auth-app
     restart: unless-stopped
@@ -21,7 +21,7 @@ services:
 
   credito-app:
     build:
-      context: ./src/backend/CarteiraBank.Api
+      context: ./src/CarteiraBank.Services.Api
       dockerfile: Dockerfile
     container_name: carteira-credito-app
     restart: unless-stopped
@@ -41,7 +41,7 @@ services:
 
   divida-app:
     build:
-      context: ./src/backend/CarteiraBank.Api
+      context: ./src/CarteiraBank.Services.Api
       dockerfile: Dockerfile
     container_name: carteira-divida-app
     restart: unless-stopped
@@ -61,7 +61,7 @@ services:
 
   acordo-app:
     build:
-      context: ./src/backend/CarteiraBank.Api
+      context: ./src/CarteiraBank.Services.Api
       dockerfile: Dockerfile
     container_name: carteira-acordo-app
     restart: unless-stopped
@@ -81,7 +81,7 @@ services:
 
   boleto-app:
     build:
-      context: ./src/backend/CarteiraBank.Api
+      context: ./src/CarteiraBank.Services.Api
       dockerfile: Dockerfile
     container_name: carteira-boleto-app
     restart: unless-stopped
@@ -101,7 +101,7 @@ services:
 
   frontend-app:
     build:
-      context: ./src/backend/CarteiraBank.Api
+      context: ./src/CarteiraBank.Services.Api
       dockerfile: Dockerfile
     container_name: carteira-frontend-app
     restart: unless-stopped

@@ -23,17 +23,14 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Restore API
-        run: dotnet restore src/backend/CarteiraBank.Api/CarteiraBank.Api.csproj
+      - name: Restore solution
+        run: dotnet restore CarteiraBankMvp.slnx
 
-      - name: Build API
-        run: dotnet build src/backend/CarteiraBank.Api/CarteiraBank.Api.csproj --no-restore
+      - name: Build solution
+        run: dotnet build CarteiraBankMvp.slnx --no-restore
 
-      - name: Restore Tests
-        run: dotnet restore src/backend/CarteiraBank.Api.Tests/CarteiraBank.Api.Tests.csproj
-
-      - name: Run Tests
-        run: dotnet test src/backend/CarteiraBank.Api.Tests/CarteiraBank.Api.Tests.csproj --no-restore --verbosity normal
+      - name: Run tests
+        run: dotnet test CarteiraBankMvp.slnx --no-build --verbosity normal
 
       - name: Secret Scan (strict-block)
         uses: gitleaks/gitleaks-action@v2.3.9
