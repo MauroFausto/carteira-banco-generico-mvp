@@ -1,0 +1,11 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allow known local placeholders"
+paths = [
+  '''^README\.md$''',
+  '''^docs/''',
+  '''^postman/''',
+  '''^\.env\.example$'''
+]
