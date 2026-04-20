@@ -37,6 +37,26 @@ dotnet test CarteiraBankMvp.slnx --no-build
 dotnet run --project src/CarteiraBank.Services.Api/CarteiraBank.Services.Api.csproj --urls http://localhost:5099
 ```
 
+Com PostgreSQL (`UseInMemoryDatabase` falso), defina `ConnectionStrings__DefaultConnection` (variavel de ambiente ou configuracao). Na subida da API, o banco relacional recebe `MigrateAsync` (migrations em `src/CarteiraBank.Infra.Data/Migrations`). Com banco em memoria, continua `EnsureCreatedAsync`.
+
+Criar ou aplicar migrations manualmente (requer [dotnet-ef](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)):
+
+```bash
+export PATH="$PATH:$HOME/.dotnet/tools"
+export DOTNET_ROOT="${DOTNET_ROOT:-$HOME/.dotnet}"
+export ConnectionStrings__DefaultConnection="Host=localhost;Port=5432;Database=carteira_bank_dev;Username=postgres;Password=postgres"
+
+dotnet ef migrations add NomeDaMigration \
+  --project src/CarteiraBank.Infra.Data/CarteiraBank.Infra.Data.csproj \
+  --startup-project src/CarteiraBank.Services.Api/CarteiraBank.Services.Api.csproj \
+  --context CarteiraBankContext
+
+dotnet ef database update \
+  --project src/CarteiraBank.Infra.Data/CarteiraBank.Infra.Data.csproj \
+  --startup-project src/CarteiraBank.Services.Api/CarteiraBank.Services.Api.csproj \
+  --context CarteiraBankContext
+```
+
 Endpoints principais:
 
 - Health: `http://localhost:5099/api/health`
@@ -44,6 +64,8 @@ Endpoints principais:
 - Scalar UI: `http://localhost:5099/scalar`
 
 ## Docker
+
+O build da imagem usa o diretorio raiz do repositorio como contexto (solution + `src/`), para incluir migrations e referencias de projeto.
 
 Compose para modulo unico:
 

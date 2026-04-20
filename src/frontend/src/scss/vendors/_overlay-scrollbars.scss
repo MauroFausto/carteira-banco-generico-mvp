@@ -1,0 +1,7 @@
+:root {
+	.os-theme-dark {
+		--os-handle-bg: rgba(var(--bs-tertiary-rgb), 0.25);
+		--os-handle-bg-hover: rgba(var(--bs-tertiary-rgb), 0.5);
+		--os-handle-bg-active: rgba(var(--bs-tertiary-rgb), 0.5);
+	}
+}

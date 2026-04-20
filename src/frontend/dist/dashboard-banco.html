@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-page="dashboard-banco">
+	<head><link rel="stylesheet" href="/acordos.12bec014.css">
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Super Admin 3.1 | Carteira Bank - Dashboard</title>
+		<link rel="icon" type="icon" href="/favicon.7155ca86.ico">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<module href="./src/html/partials/_page-loader.html"></module>
+		<module href="./src/html/partials/_nav-bar.html"></module>
+		<module href="./src/html/partials/_sidebar.html"></module>
+
+		<header class="content-header">
+			<h2 class="m-0 ps-3 text-body-emphasis fs-6">Carteira Bank - Dashboard</h2>
+			<i class="ms-auto"></i>
+		</header>
+
+		<div id="content" data-scrollbar="">
+			<div class="row g-3 mb-3">
+				<div class="col-12 col-lg-6">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title fs-5 mb-4">Cliente Logado</h3>
+							<div id="cb-dashboard-cliente" class="text-body-secondary">Carregando...</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-lg-6">
+					<div class="card">
+						<div class="card-body">
+							<h3 class="card-title fs-5 mb-4">Status da API</h3>
+							<div id="cb-dashboard-health" class="text-body-secondary">Carregando...</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row g-3 mb-3">
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Solicitacoes</div>
+							<div id="cb-dashboard-total-solicitacoes" class="fs-3 fw-semibold">0</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Contratos</div>
+							<div id="cb-dashboard-total-contratos" class="fs-3 fw-semibold">0</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Contratos em aberto</div>
+							<div id="cb-dashboard-contratos-abertos" class="fs-3 fw-semibold">0</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Saldo devedor estimado</div>
+							<div id="cb-dashboard-saldo-total" class="fs-3 fw-semibold">R$ 0,00</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-body">
+					<h3 class="card-title fs-5 mb-4">Solicitacoes por status</h3>
+					<div style="height: 320px">
+						<canvas id="cb-dashboard-status-chart"></canvas>
+					</div>
+				</div>
+			</div>
+
+			<div id="cb-dashboard-feedback"></div>
+		</div>
+
+		<script>window.defaultTheme = "8";
+var availableThemes = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+];
+var theme = localStorage.getItem("sa-theme") || window.defaultTheme;
+if (!availableThemes.includes(theme)) {
+    theme = window.defaultTheme;
+    localStorage.setItem("sa-theme", theme);
+}
+document.documentElement.setAttribute("data-sa-theme", theme);
+
+</script>
+		<script src="/acordos.739bf03c.js" defer=""></script>
+		<script src="/acordos.103337dd.js" defer=""></script>
+	</body>
+</html>

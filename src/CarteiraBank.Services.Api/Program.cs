@@ -3,6 +3,7 @@ using CarteiraBank.Infra.CrossCutting.Identity;
 using CarteiraBank.Infra.CrossCutting.IoC;
 using CarteiraBank.Infra.Data.Context;
 using CarteiraBank.Services.Api.Middleware;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Serilog;
 using Serilog.Context;
@@ -78,7 +79,15 @@ app.MapControllers();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CarteiraBankContext>();
-    await db.Database.EnsureCreatedAsync();
+    if (db.Database.IsRelational())
+    {
+        await db.Database.MigrateAsync(CancellationToken.None);
+    }
+    else
+    {
+        await db.Database.EnsureCreatedAsync(CancellationToken.None);
+    }
+
     await SeedData.GarantirCargaInicialAsync(db, CancellationToken.None);
 }
 

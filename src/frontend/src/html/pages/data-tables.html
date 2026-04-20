@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-page="components-datatables">
+	<module href="./src/html/partials/_head.html" locals='{ "pageTitle": "Datatables" }'></module>
+	<body>
+		<!-- Page loader -->
+		<module href="./src/html/partials/_page-loader.html"></module>
+
+		<!-- Site header -->
+		<module href="./src/html/partials/_nav-bar.html"></module>
+
+		<!-- Site sidebar -->
+		<module href="./src/html/partials/_sidebar.html"></module>
+
+		<!-- Content header -->
+		<div class="content-header">
+			<h2 class="m-0 ps-3 text-body-emphasis fs-6">Datatables</h2>
+
+			<nav aria-label="breadcrumb" class="ms-8 d-none d-sm-flex">
+				<ol class="breadcrumb fs-7">
+					<li class="breadcrumb-item"><a href="#">Miscellaneous</a></li>
+					<li class="breadcrumb-item active" aria-current="page">Components</li>
+				</ol>
+			</nav>
+
+			<i class="ms-auto"></i>
+
+			<div id="toc-wrapper"></div>
+		</div>
+
+		<div id="content" data-scrollbar>
+			<!-- Body -->
+			<div class="mw-1000 w-100 mx-auto">
+				<div class="card mb-3">
+					<div class="card-body">
+						<h3 class="card-title fs-5">Basic example</h3>
+						<p class="card-subtitle mb-6">Basic Datatable with least configurations</p>
+
+						<div class="table-responsive p-1">
+							<table id="datatable-basic" class="table table-bordered"></table>
+						</div>
+					</div>
+				</div>
+
+				<div class="card mb-3">
+					<div class="card-body">
+						<h3 class="card-title fs-5">Export Data</h3>
+						<p class="card-subtitle mb-6">Confogure datatable to export data with multiple formats</p>
+
+						<div class="table-responsive p-1 mb-10">
+							<table id="datatable-export" class="table table-bordered"></table>
+						</div>
+
+						<div class="d-flex align-items-start flex-wrap gap-2">
+							<button type="button" class="btn btn-secondary" id="export-csv">Export CSV</button>
+							<button type="button" class="btn btn-secondary" id="export-sql">Export SQL</button>
+							<button type="button" class="btn btn-secondary" id="export-txt">Export TXT</button>
+							<button type="button" class="btn btn-secondary" id="export-json">Export JSON</button>
+							<button type="button" class="btn btn-secondary" id="export-custom">Export Custom</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="card mb-3">
+					<div class="card-body">
+						<h3 class="card-title fs-5">Coulmn Filters</h3>
+						<p class="card-subtitle mb-6">Add individual search boxes for each column to enable column-specific filtering</p>
+
+						<div class="table-responsive p-1">
+							<table id="datatable-filter" class="table table-bordered"></table>
+						</div>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-body">
+						<h3 class="card-title fs-5">Checkbox</h3>
+						<p class="card-subtitle mb-6">Add chekbox for row specific actions</p>
+
+						<div class="table-responsive p-1">
+							<table id="datatable-toggle" class="table table-bordered"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<module href="./src/html/partials/_script.html"></module>
+	</body>
+</html>

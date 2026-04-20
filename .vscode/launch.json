@@ -1,0 +1,67 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "CarteiraBank.Api (debug)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/CarteiraBank.Services.Api/bin/Debug/net10.0/CarteiraBank.Services.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/CarteiraBank.Services.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5099",
+                "ConnectionStrings__DefaultConnection": "Host=localhost;Port=5432;Database=carteira_bank_dev;Username=postgres;Password=postgres"
+            }
+        },
+        {
+            "name": "CarteiraBank.Api (debug, porta 5100)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/CarteiraBank.Services.Api/bin/Debug/net10.0/CarteiraBank.Services.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/CarteiraBank.Services.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5100",
+                "ConnectionStrings__DefaultConnection": "Host=localhost;Port=5432;Database=carteira_bank_dev;Username=postgres;Password=postgres"
+            }
+        },
+        {
+            "name": "CarteiraBank.Api (in-memory)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/src/CarteiraBank.Services.Api/bin/Debug/net10.0/CarteiraBank.Services.Api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/src/CarteiraBank.Services.Api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ASPNETCORE_URLS": "http://localhost:5101",
+                "USE_INMEMORY_DATABASE": "true"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}

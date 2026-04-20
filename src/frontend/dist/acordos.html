@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" data-page="acordos">
+	<head><link rel="stylesheet" href="/acordos.12bec014.css">
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Super Admin 3.1 | Carteira Bank - Acordos e Boletos</title>
+		<link rel="icon" type="icon" href="/favicon.7155ca86.ico">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<module href="./src/html/partials/_page-loader.html"></module>
+		<module href="./src/html/partials/_nav-bar.html"></module>
+		<module href="./src/html/partials/_sidebar.html"></module>
+
+		<header class="content-header">
+			<h2 class="m-0 ps-3 text-body-emphasis fs-6">Acordos e Boletos</h2>
+			<i class="ms-auto"></i>
+		</header>
+
+		<div id="content" data-scrollbar="">
+			<div class="card mb-3">
+				<div class="card-body">
+					<h3 class="card-title fs-5 mb-4">Criar acordo</h3>
+					<form id="cb-form-acordo" class="row g-3">
+						<div class="col-12 col-lg-4">
+							<label class="form-label" for="cb-acordo-contrato-id">Contrato (ID)</label>
+							<input id="cb-acordo-contrato-id" class="form-control" type="text" required="">
+						</div>
+						<div class="col-12 col-lg-4">
+							<label class="form-label" for="cb-acordo-desconto">Valor de desconto</label>
+							<input id="cb-acordo-desconto" class="form-control" type="number" step="0.01" min="0" required="">
+						</div>
+						<div class="col-12 col-lg-4">
+							<label class="form-label" for="cb-acordo-parcelas">Quantidade de parcelas</label>
+							<input id="cb-acordo-parcelas" class="form-control" type="number" min="1" step="1" required="">
+						</div>
+						<div class="col-12">
+							<button class="btn btn-primary" type="submit">Criar acordo</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-body">
+					<h3 class="card-title fs-5 mb-4">Emitir boleto</h3>
+					<form id="cb-form-boleto" class="row g-3">
+						<div class="col-12 col-lg-8">
+							<label class="form-label" for="cb-parcela-acordo-id">Parcela do acordo (ID)</label>
+							<input id="cb-parcela-acordo-id" class="form-control" type="text" required="">
+						</div>
+						<div class="col-12 col-lg-4 d-flex align-items-end gap-2">
+							<button class="btn btn-primary" type="submit">Emitir</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-body">
+					<h3 class="card-title fs-5 mb-4">Baixar boleto PDF</h3>
+					<form id="cb-form-download-boleto" class="row g-3">
+						<div class="col-12 col-lg-8">
+							<label class="form-label" for="cb-boleto-id">Boleto (ID)</label>
+							<input id="cb-boleto-id" class="form-control" type="text" required="">
+						</div>
+						<div class="col-12 col-lg-4 d-flex align-items-end gap-2">
+							<button class="btn btn-primary" type="submit">Baixar PDF</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div id="cb-acordos-feedback"></div>
+		</div>
+
+		<script>window.defaultTheme = "8";
+var availableThemes = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+];
+var theme = localStorage.getItem("sa-theme") || window.defaultTheme;
+if (!availableThemes.includes(theme)) {
+    theme = window.defaultTheme;
+    localStorage.setItem("sa-theme", theme);
+}
+document.documentElement.setAttribute("data-sa-theme", theme);
+
+</script>
+		<script src="/acordos.739bf03c.js" defer=""></script>
+		<script src="/acordos.103337dd.js" defer=""></script>
+	</body>
+</html>

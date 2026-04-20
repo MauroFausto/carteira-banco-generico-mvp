@@ -1,0 +1,19 @@
+<script>
+	// Get current theme from LocalStorage
+	window.defaultTheme = "8";
+
+	var availableThemes = ["1", "2", "3", "4", "5", "6", "7", "8"];
+	var theme = localStorage.getItem("sa-theme") || window.defaultTheme;
+
+	// Check if the theme is valid, if not, set to default
+	if (!availableThemes.includes(theme)) {
+		theme = window.defaultTheme;
+		localStorage.setItem("sa-theme", theme);
+	}
+
+	// Set color mode on page load
+	document.documentElement.setAttribute("data-sa-theme", theme);
+</script>
+
+<script src="../../js/index.js" type="module"></script>
+<script src="../../js/vendor.js" type="module"></script>

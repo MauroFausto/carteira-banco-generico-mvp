@@ -1,0 +1,6 @@
+.popover-header,
+.popover-body {
+	overflow: hidden;
+	border-radius: $border-radius;
+	backdrop-filter: blur(0.5rem);
+}

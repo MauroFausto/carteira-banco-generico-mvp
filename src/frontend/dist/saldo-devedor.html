@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" data-page="saldo-devedor">
+	<head><link rel="stylesheet" href="/acordos.12bec014.css">
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Super Admin 3.1 | Carteira Bank - Saldo Devedor</title>
+		<link rel="icon" type="icon" href="/favicon.7155ca86.ico">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<module href="./src/html/partials/_page-loader.html"></module>
+		<module href="./src/html/partials/_nav-bar.html"></module>
+		<module href="./src/html/partials/_sidebar.html"></module>
+
+		<header class="content-header">
+			<h2 class="m-0 ps-3 text-body-emphasis fs-6">Saldo Devedor</h2>
+			<i class="ms-auto"></i>
+			<a class="btn btn-sm btn-subtle" href="/contratos.html">Voltar para contratos</a>
+		</header>
+
+		<div id="content" data-scrollbar="">
+			<div class="row g-3 mb-3">
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Contrato</div>
+							<div id="cb-saldo-contrato" class="fs-6 fw-semibold">-</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Principal</div>
+							<div id="cb-saldo-principal" class="fs-5 fw-semibold">R$ 0,00</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Juros + Multa</div>
+							<div id="cb-saldo-juros-multa" class="fs-5 fw-semibold">R$ 0,00</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-md-6 col-xl-3">
+					<div class="card">
+						<div class="card-body">
+							<div class="text-body-secondary fs-7">Total</div>
+							<div id="cb-saldo-total" class="fs-5 fw-semibold">R$ 0,00</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-body">
+					<div class="d-flex justify-content-between flex-wrap gap-2">
+						<div class="text-body-secondary">Calculado em:</div>
+						<div id="cb-saldo-calculado-em" class="fw-medium">-</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="cb-saldo-feedback"></div>
+		</div>
+
+		<script>window.defaultTheme = "8";
+var availableThemes = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8"
+];
+var theme = localStorage.getItem("sa-theme") || window.defaultTheme;
+if (!availableThemes.includes(theme)) {
+    theme = window.defaultTheme;
+    localStorage.setItem("sa-theme", theme);
+}
+document.documentElement.setAttribute("data-sa-theme", theme);
+
+</script>
+		<script src="/acordos.739bf03c.js" defer=""></script>
+		<script src="/acordos.103337dd.js" defer=""></script>
+	</body>
+</html>

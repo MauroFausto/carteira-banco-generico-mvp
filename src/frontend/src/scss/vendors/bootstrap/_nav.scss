@@ -1,0 +1,116 @@
+@import "../../mixins";
+
+.nav-pills {
+	gap: 0.1rem;
+
+	.nav-link {
+		&:not(.active):not(:disabled) {
+			&:hover {
+				background-color: rgba(var(--bs-tertiary-rgb), 0.1);
+			}
+		}
+
+		&:not(.d-none) {
+			display: flex;
+		}
+
+		align-items: center;
+
+		& > .ph {
+			margin-right: 0.5rem;
+			margin-left: -0.15rem;
+
+			&:not([class*="fs-"]) {
+				font-size: 1.15rem;
+			}
+		}
+
+		.badge {
+			--bs-badge-padding-x: 0.4rem;
+			--bs-badge-padding-y: 0;
+			--bs-badge-border-radius: 0.25rem;
+
+			margin-left: auto;
+			line-height: 1;
+			display: inline-grid;
+			place-content: center;
+			min-width: 1.3rem;
+			height: 1.3rem;
+			background-color: rgba(var(--bs-border-rgb), 0.2);
+		}
+
+		&.active {
+			background-color: var(--bs-tertiary-bg);
+			color: rgb(var(--bs-highlight-text-rgb));
+		}
+	}
+
+	&:not(.nav-scroll) {
+		.nav-link {
+			&.active {
+				margin-block: 1px;
+			}
+		}
+	}
+}
+
+// Mobile freindly nav pills with a horizontal scroll
+.nav-scroll {
+	overflow-x: auto;
+	overflow-y: hidden;
+	flex-wrap: nowrap;
+
+	@include hide-scrollbar();
+
+	.nav-link {
+		white-space: nowrap;
+	}
+}
+
+.nav {
+	// Plain navs
+	&.nav-plain {
+		gap: 1.1rem;
+
+		.nav-link {
+			--bs-nav-link-padding-y: 0;
+			--bs-nav-link-padding-x: 0;
+			--bs-nav-link-hover-color: #{$secondary-color};
+			--bs-nav-tabs-link-active-bg: transparent;
+			line-height: 1;
+
+			&.active {
+				color: rgb(var(--bs-highlight-text-rgb));
+			}
+		}
+	}
+
+	// Colored nav links
+	.nav-link {
+		&.text-danger {
+			--bs-nav-link-hover-color: #{$danger};
+			--bs-nav-link-hover-bg: #{rgba($danger, 0.15)};
+		}
+	}
+
+	&.nav-tabs {
+		gap: 1px;
+
+		.nav-link {
+			border-radius: $border-radius;
+
+			&:not(.active):not(.disabled) {
+				&:hover {
+					background-color: $gray-400;
+				}
+			}
+		}
+	}
+
+	&.nav-underline {
+		.nav-link.active,
+		.show > .nav-link {
+			font-weight: $font-weight-normal;
+		}
+	}
+}

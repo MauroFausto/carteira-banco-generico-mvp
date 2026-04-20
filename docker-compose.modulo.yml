@@ -1,8 +1,8 @@
 services:
   modulo-app:
     build:
-      context: ./src/CarteiraBank.Services.Api
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: src/CarteiraBank.Services.Api/Dockerfile
     container_name: carteira-modulo-app
     restart: unless-stopped
     environment:

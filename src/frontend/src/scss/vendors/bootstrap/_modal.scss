@@ -1,0 +1,14 @@
+.modal-content {
+	backdrop-filter: blur(2rem);
+}
+
+.modal-title {
+	color: $emphasis-color;
+	font-size: $font-size-base;
+}
+
+.modal-header {
+	.btn-close {
+		flex-shrink: 0;
+	}
+}

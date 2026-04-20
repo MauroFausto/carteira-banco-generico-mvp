@@ -1,9 +1,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-COPY . .
-RUN dotnet restore "CarteiraBank.Services.Api.csproj"
-RUN dotnet publish "CarteiraBank.Services.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+COPY CarteiraBankMvp.slnx ./
+COPY src/ ./src/
+
+RUN dotnet restore "src/CarteiraBank.Services.Api/CarteiraBank.Services.Api.csproj"
+RUN dotnet publish "src/CarteiraBank.Services.Api/CarteiraBank.Services.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

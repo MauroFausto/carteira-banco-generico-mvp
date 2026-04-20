@@ -1,0 +1,55 @@
+@import "mixins";
+@import "variables";
+
+//---------------------------------
+// Core Bootstrap
+// - Variables
+// - Mixins
+// - Core styles
+// - Overrides
+//---------------------------------
+@import "vendors/bootstrap/bootstrap";
+
+// Theme
+@import "theme";
+
+//---------------------------------
+// Core styles
+//---------------------------------
+// Print
+@import "print";
+
+// Base
+@import "base";
+
+// Table
+@import "table";
+
+// Code
+@import "code";
+
+// Form
+@import "form";
+
+// Layout
+@import "layout";
+@import "sidebar";
+@import "header";
+
+// Miscelaneous
+@import "misc";
+
+// Pages
+@import "pages";
+
+//---------------------------------
+// Third part vendor overrides
+//---------------------------------
+@import "vendors/jsvectormap";
+@import "vendors/chartjs";
+@import "vendors/vanillajs-datepicker";
+@import "vendors/quill";
+@import "vendors/fullcalendar";
+@import "vendors/nouislider";
+@import "vendors/simple-datatables";
+@import "vendors/overlay-scrollbars";

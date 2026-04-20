@@ -1,0 +1,4263 @@
+{
+  "collection": {
+    "_": {
+      "postman_id": "7a4d8a4d-2d22-4eaf-9f8b-8f4dc92f1e72"
+    },
+    "item": [
+      {
+        "id": "665e5625-135c-43d0-b8f1-ce262ae12c41",
+        "name": "01 - Healthcheck",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "health"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "d34c49c2-719a-4f8e-9b73-7b8aeacd519f",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 200\", function () {",
+                "  pm.response.to.have.status(200);",
+                "});"
+              ],
+              "_lastExecutionId": "c58b3731-ce78-4e36-a8c7-f5ba28ce5bc2"
+            }
+          }
+        ]
+      },
+      {
+        "id": "f561985f-2e9c-439a-bad9-e876da7e10cf",
+        "name": "02 - Cliente - Meu Perfil",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "clientes",
+              "me"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "{{clienteUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "8effc009-a1b9-4882-83dc-793be249c422",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 200\", function () {",
+                "  pm.response.to.have.status(200);",
+                "});"
+              ],
+              "_lastExecutionId": "743aafcd-77e0-470d-9a29-a4f0a8e3c54e"
+            }
+          }
+        ]
+      },
+      {
+        "id": "888d5007-6ef6-497b-808b-782987016ea7",
+        "name": "03 - Cliente - Criar Solicitacao (Valida)",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "solicitacoes-credito"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "{{clienteUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"valorSolicitado\": 2500,\n  \"quantidadeParcelasSolicitada\": 6,\n  \"finalidade\": \"Renegociacao\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "3918dd56-d164-4d95-8d00-4ae01ec047d8",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 200\", function () {",
+                "  pm.response.to.have.status(200);",
+                "});",
+                "var data = pm.response.json();",
+                "if (data && data.id) {",
+                "  pm.environment.set(\"solicitacaoId\", data.id);",
+                "}"
+              ],
+              "_lastExecutionId": "a7cfd599-91af-4dda-9267-62bbe42b580a"
+            }
+          }
+        ]
+      },
+      {
+        "id": "0b59097e-c197-42d0-9ee5-728732355ee2",
+        "name": "04 - Cliente - Criar Solicitacao (Invalida - 400)",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "solicitacoes-credito"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "{{clienteUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"valorSolicitado\": 0,\n  \"quantidadeParcelasSolicitada\": 0,\n  \"finalidade\": \"Teste\"\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "298dbca3-d275-4364-8856-2e60fd9ecaba",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 400\", function () {",
+                "  pm.response.to.have.status(400);",
+                "});",
+                "var erro = pm.response.json();",
+                "pm.test(\"Contrato de erro\", function () {",
+                "  pm.expect(erro).to.have.property(\"codigo\");",
+                "  pm.expect(erro).to.have.property(\"mensagem\");",
+                "  pm.expect(erro).to.have.property(\"orientacao\");",
+                "  pm.expect(erro).to.have.property(\"traceId\");",
+                "});"
+              ],
+              "_lastExecutionId": "29bb674e-3081-4253-b04c-4786efd53814"
+            }
+          }
+        ]
+      },
+      {
+        "id": "bbe51c9b-8f44-478b-9bed-3c2af8193ae7",
+        "name": "05 - Supervisor - Listar Solicitacoes",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "solicitacoes-credito"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "{{supervisorUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": []
+      },
+      {
+        "id": "be51ae24-e325-41e0-902a-09d0e25cf5cd",
+        "name": "06 - Supervisor - Aprovar Solicitacao",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "solicitacoes-credito",
+              "{{solicitacaoId}}",
+              "decisao"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "{{supervisorUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"aprovar\": true,\n  \"motivo\": \"Aprovado para cenario de teste\"\n}"
+          }
+        },
+        "response": [],
+        "event": []
+      },
+      {
+        "id": "b22cd934-d1bf-455c-a06f-9994e02a0662",
+        "name": "07 - Cliente - Listar Contratos",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "contratos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "{{clienteUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "3ea3ef39-9d54-44af-b539-682edfca505a",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 200\", function () {",
+                "  pm.response.to.have.status(200);",
+                "});",
+                "var lista = pm.response.json();",
+                "if (Array.isArray(lista) && lista.length > 0) {",
+                "  pm.environment.set(\"contratoId\", lista[0].id);",
+                "}"
+              ],
+              "_lastExecutionId": "38269fb6-4ba2-4d84-abcf-6fb9dc3fa19c"
+            }
+          }
+        ]
+      },
+      {
+        "id": "f85e8681-7185-4a00-b2fb-3f4824b7164e",
+        "name": "08 - Cliente - Consultar Saldo Devedor",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "contratos",
+              "{{contratoId}}",
+              "saldo-devedor"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "{{clienteUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": []
+      },
+      {
+        "id": "e0bb1819-c3a2-49c7-bf53-5540514ae39d",
+        "name": "09 - Supervisor - Criar Acordo",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "contratos",
+              "{{contratoId}}",
+              "acordos"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "{{supervisorUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"valorDesconto\": 100,\n  \"quantidadeParcelas\": 4\n}"
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "ed9fa4b3-43df-43fb-bffd-a251f9bae7fd",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test(\"Status 200\", function () {",
+                "  pm.response.to.have.status(200);",
+                "});",
+                "var acordo = pm.response.json();",
+                "if (acordo && acordo.id) {",
+                "  pm.environment.set(\"acordoId\", acordo.id);",
+                "}"
+              ],
+              "_lastExecutionId": "17f796f3-f1c4-477f-a0a2-990f08a1ccee"
+            }
+          }
+        ]
+      },
+      {
+        "id": "f7017458-5fc7-4eaf-b6a6-d472f7acd1fb",
+        "name": "10 - Supervisor - Emitir Boleto (informe parcelaAcordoId)",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "acordos",
+              "{{parcelaAcordoId}}",
+              "boleto"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "{{supervisorUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            }
+          ],
+          "method": "POST"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "860fdd73-0512-4296-b623-a9d3f1f04e95",
+              "type": "text/javascript",
+              "exec": [
+                "if (!pm.environment.get(\"parcelaAcordoId\")) {",
+                "  pm.test(\"parcelaAcordoId pendente\", function () {",
+                "    pm.expect(true).to.eql(true);",
+                "  });",
+                "} else {",
+                "  pm.test(\"Status 200\", function () {",
+                "    pm.response.to.have.status(200);",
+                "  });",
+                "  var boleto = pm.response.json();",
+                "  if (boleto && boleto.id) {",
+                "    pm.environment.set(\"boletoId\", boleto.id);",
+                "  }",
+                "}"
+              ],
+              "_lastExecutionId": "2b3a3abf-265d-4515-9c1e-f2ed7268e7ed"
+            }
+          }
+        ]
+      },
+      {
+        "id": "314a4476-67f1-46f2-a71a-78b8eaee48f1",
+        "name": "11 - Cliente - Download Boleto PDF",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "boletos",
+              "{{boletoId}}",
+              "pdf"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "{{clienteUserId}}"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            }
+          ],
+          "method": "GET"
+        },
+        "response": [],
+        "event": []
+      }
+    ],
+    "event": [],
+    "variable": [
+      {
+        "type": "any",
+        "value": "http://localhost:5099",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "11111111-1111-1111-1111-111111111111",
+        "key": "clienteUserId"
+      },
+      {
+        "type": "any",
+        "value": "22222222-2222-2222-2222-222222222222",
+        "key": "supervisorUserId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "solicitacaoId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "contratoId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "acordoId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "parcelaAcordoId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "boletoId"
+      }
+    ],
+    "info": {
+      "_postman_id": "7a4d8a4d-2d22-4eaf-9f8b-8f4dc92f1e72",
+      "name": "CarteiraBank MVP",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": {
+        "content": "Colecao para testes do MVP CarteiraBank (Cliente/Supervisor).",
+        "type": "text/plain"
+      }
+    }
+  },
+  "environment": {
+    "_": {
+      "postman_variable_scope": "environment",
+      "postman_exported_at": "2026-04-18T16:50:00.000Z",
+      "postman_exported_using": "Codex"
+    },
+    "id": "f61f8562-f3f8-4f67-b6ad-fc5607c80a34",
+    "name": "CarteiraBank MVP - Local",
+    "values": [
+      {
+        "type": "any",
+        "value": "http://localhost:5119",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "11111111-1111-1111-1111-111111111111",
+        "key": "clienteUserId"
+      },
+      {
+        "type": "any",
+        "value": "22222222-2222-2222-2222-222222222222",
+        "key": "supervisorUserId"
+      },
+      {
+        "type": "any",
+        "value": "bfa28346-09d1-4201-9fab-911391243a63",
+        "key": "solicitacaoId"
+      },
+      {
+        "type": "any",
+        "value": "e72a9c42-f8cd-4e21-9866-b3cf293697a5",
+        "key": "contratoId"
+      },
+      {
+        "type": "any",
+        "value": "755adb93-48e7-4998-9c98-6bae796e8663",
+        "key": "acordoId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "parcelaAcordoId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "boletoId"
+      }
+    ]
+  },
+  "globals": {
+    "id": "4f3d97c1-cabe-4a93-acc0-4fd2a9865dda",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 11,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 7,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 11,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 11,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 11,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 8,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 7,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 17.363636363636363,
+      "responseMin": 2,
+      "responseMax": 51,
+      "responseSd": 17.041514696191058,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1776709800076,
+      "completed": 1776709800424
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 11,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "72c1c856-150e-412d-b6fa-26f87fae06f9",
+          "httpRequestId": "3e279dac-3d14-4c3f-8fc5-6573d0e7a6f9"
+        },
+        "item": {
+          "id": "665e5625-135c-43d0-b8f1-ce262ae12c41",
+          "name": "01 - Healthcheck",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "d34c49c2-719a-4f8e-9b73-7b8aeacd519f",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "_lastExecutionId": "c58b3731-ce78-4e36-a8c7-f5ba28ce5bc2"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "health"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d082a10c-3169-406c-9688-031f4e324128",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "c81fa6ad-32ee-4e3f-8f2b-a151969d1672",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:29:59 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "2d811335b6c849beb74677c004c55511"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              111,
+              107,
+              34,
+              44,
+              34,
+              115,
+              101,
+              114,
+              118,
+              105,
+              99,
+              101,
+              34,
+              58,
+              34,
+              99,
+              97,
+              114,
+              116,
+              101,
+              105,
+              114,
+              97,
+              45,
+              98,
+              97,
+              110,
+              107,
+              45,
+              97,
+              112,
+              105,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 31,
+          "responseSize": 45
+        },
+        "id": "665e5625-135c-43d0-b8f1-ce262ae12c41",
+        "assertions": [
+          {
+            "assertion": "Status 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "e0755bca-b86b-4429-b248-d200f8f77343",
+          "length": 11,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "b46513fb-eba5-4cbf-b7a9-24059821025c"
+        },
+        "item": {
+          "id": "f561985f-2e9c-439a-bad9-e876da7e10cf",
+          "name": "02 - Cliente - Meu Perfil",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "clientes",
+                "me"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{clienteUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Cliente"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "8effc009-a1b9-4882-83dc-793be249c422",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});"
+                ],
+                "_lastExecutionId": "743aafcd-77e0-470d-9a29-a4f0a8e3c54e"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "clientes",
+              "me"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "11111111-1111-1111-1111-111111111111"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "3d02a027-d4f6-4e4b-bb6c-79ef183283d3",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "5f475c92-d83b-443c-8132-c3f7aa2cd415",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:29:59 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "b52d9f04f43e42b5926831f1500e2b47"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              34,
+              44,
+              34,
+              110,
+              111,
+              109,
+              101,
+              67,
+              111,
+              109,
+              112,
+              108,
+              101,
+              116,
+              111,
+              34,
+              58,
+              34,
+              67,
+              108,
+              105,
+              101,
+              110,
+              116,
+              101,
+              32,
+              68,
+              101,
+              109,
+              111,
+              34,
+              44,
+              34,
+              100,
+              111,
+              99,
+              117,
+              109,
+              101,
+              110,
+              116,
+              111,
+              34,
+              58,
+              34,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55,
+              56,
+              57,
+              48,
+              48,
+              34,
+              44,
+              34,
+              101,
+              109,
+              97,
+              105,
+              108,
+              34,
+              58,
+              34,
+              99,
+              108,
+              105,
+              101,
+              110,
+              116,
+              101,
+              64,
+              100,
+              101,
+              109,
+              111,
+              46,
+              108,
+              111,
+              99,
+              97,
+              108,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 7,
+          "responseSize": 130
+        },
+        "id": "f561985f-2e9c-439a-bad9-e876da7e10cf",
+        "assertions": [
+          {
+            "assertion": "Status 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "1068bb50-1ded-490b-9211-9872a710e0f8",
+          "length": 11,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "f8040a38-01d0-4771-a1ce-c6ee898d79e8"
+        },
+        "item": {
+          "id": "888d5007-6ef6-497b-808b-782987016ea7",
+          "name": "03 - Cliente - Criar Solicitacao (Valida)",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "solicitacoes-credito"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{clienteUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Cliente"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valorSolicitado\": 2500,\n  \"quantidadeParcelasSolicitada\": 6,\n  \"finalidade\": \"Renegociacao\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "3918dd56-d164-4d95-8d00-4ae01ec047d8",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "var data = pm.response.json();",
+                  "if (data && data.id) {",
+                  "  pm.environment.set(\"solicitacaoId\", data.id);",
+                  "}"
+                ],
+                "_lastExecutionId": "a7cfd599-91af-4dda-9267-62bbe42b580a"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "solicitacoes-credito"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "11111111-1111-1111-1111-111111111111"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "43521145-c019-419b-966c-3bd02c1212e0",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "98",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"valorSolicitado\": 2500,\n  \"quantidadeParcelasSolicitada\": 6,\n  \"finalidade\": \"Renegociacao\"\n}"
+          }
+        },
+        "response": {
+          "id": "3261c2fc-ea42-401c-a1cf-1dbda9f4ffbc",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:29:59 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "65d61cff907e4e829701cd43278ce68a"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              98,
+              102,
+              97,
+              50,
+              56,
+              51,
+              52,
+              54,
+              45,
+              48,
+              57,
+              100,
+              49,
+              45,
+              52,
+              50,
+              48,
+              49,
+              45,
+              57,
+              102,
+              97,
+              98,
+              45,
+              57,
+              49,
+              49,
+              51,
+              57,
+              49,
+              50,
+              52,
+              51,
+              97,
+              54,
+              51,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              80,
+              101,
+              110,
+              100,
+              101,
+              110,
+              116,
+              101,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 9,
+          "responseSize": 65
+        },
+        "id": "888d5007-6ef6-497b-808b-782987016ea7",
+        "assertions": [
+          {
+            "assertion": "Status 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "58d0df32-ed50-4109-8eb2-b5dbeb0b3d89",
+          "length": 11,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "cf17fcdf-32dc-43e8-8642-d1c9a50b6c6b"
+        },
+        "item": {
+          "id": "0b59097e-c197-42d0-9ee5-728732355ee2",
+          "name": "04 - Cliente - Criar Solicitacao (Invalida - 400)",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "solicitacoes-credito"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{clienteUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Cliente"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valorSolicitado\": 0,\n  \"quantidadeParcelasSolicitada\": 0,\n  \"finalidade\": \"Teste\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "298dbca3-d275-4364-8856-2e60fd9ecaba",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 400\", function () {",
+                  "  pm.response.to.have.status(400);",
+                  "});",
+                  "var erro = pm.response.json();",
+                  "pm.test(\"Contrato de erro\", function () {",
+                  "  pm.expect(erro).to.have.property(\"codigo\");",
+                  "  pm.expect(erro).to.have.property(\"mensagem\");",
+                  "  pm.expect(erro).to.have.property(\"orientacao\");",
+                  "  pm.expect(erro).to.have.property(\"traceId\");",
+                  "});"
+                ],
+                "_lastExecutionId": "29bb674e-3081-4253-b04c-4786efd53814"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "solicitacoes-credito"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "11111111-1111-1111-1111-111111111111"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "154d7b6c-da8e-4470-bae6-bce72e061326",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "88",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"valorSolicitado\": 0,\n  \"quantidadeParcelasSolicitada\": 0,\n  \"finalidade\": \"Teste\"\n}"
+          }
+        },
+        "response": {
+          "id": "02c16e9a-7838-4194-bb0b-5f0c5719541e",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "fb40242986df419590c23a4dd0de4e9d"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              101,
+              115,
+              115,
+              111,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              99,
+              111,
+              100,
+              105,
+              103,
+              111,
+              34,
+              58,
+              34,
+              69,
+              82,
+              82,
+              79,
+              95,
+              86,
+              65,
+              76,
+              73,
+              68,
+              65,
+              67,
+              65,
+              79,
+              34,
+              44,
+              34,
+              109,
+              101,
+              110,
+              115,
+              97,
+              103,
+              101,
+              109,
+              34,
+              58,
+              34,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              86,
+              97,
+              108,
+              111,
+              114,
+              32,
+              83,
+              111,
+              108,
+              105,
+              99,
+              105,
+              116,
+              97,
+              100,
+              111,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              32,
+              100,
+              101,
+              118,
+              101,
+              32,
+              115,
+              101,
+              114,
+              32,
+              115,
+              117,
+              112,
+              101,
+              114,
+              105,
+              111,
+              114,
+              32,
+              97,
+              32,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              48,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              46,
+              59,
+              32,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              81,
+              117,
+              97,
+              110,
+              116,
+              105,
+              100,
+              97,
+              100,
+              101,
+              32,
+              80,
+              97,
+              114,
+              99,
+              101,
+              108,
+              97,
+              115,
+              32,
+              83,
+              111,
+              108,
+              105,
+              99,
+              105,
+              116,
+              97,
+              100,
+              97,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              32,
+              100,
+              101,
+              118,
+              101,
+              32,
+              115,
+              101,
+              114,
+              32,
+              115,
+              117,
+              112,
+              101,
+              114,
+              105,
+              111,
+              114,
+              32,
+              97,
+              32,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              48,
+              92,
+              117,
+              48,
+              48,
+              50,
+              55,
+              46,
+              34,
+              44,
+              34,
+              111,
+              114,
+              105,
+              101,
+              110,
+              116,
+              97,
+              99,
+              97,
+              111,
+              34,
+              58,
+              34,
+              86,
+              101,
+              114,
+              105,
+              102,
+              105,
+              113,
+              117,
+              101,
+              32,
+              111,
+              115,
+              32,
+              100,
+              97,
+              100,
+              111,
+              115,
+              32,
+              105,
+              110,
+              102,
+              111,
+              114,
+              109,
+              97,
+              100,
+              111,
+              115,
+              46,
+              34,
+              44,
+              34,
+              116,
+              114,
+              97,
+              99,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              97,
+              50,
+              50,
+              48,
+              50,
+              101,
+              97,
+              101,
+              97,
+              57,
+              98,
+              98,
+              50,
+              54,
+              54,
+              99,
+              53,
+              51,
+              52,
+              49,
+              56,
+              51,
+              55,
+              49,
+              50,
+              54,
+              97,
+              55,
+              99,
+              57,
+              49,
+              97,
+              34,
+              44,
+              34,
+              116,
+              105,
+              109,
+              101,
+              115,
+              116,
+              97,
+              109,
+              112,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              52,
+              45,
+              50,
+              48,
+              84,
+              49,
+              56,
+              58,
+              51,
+              48,
+              58,
+              48,
+              48,
+              46,
+              49,
+              57,
+              53,
+              49,
+              49,
+              54,
+              51,
+              90,
+              34,
+              44,
+              34,
+              100,
+              101,
+              116,
+              97,
+              108,
+              104,
+              101,
+              115,
+              34,
+              58,
+              91,
+              93,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 5,
+          "responseSize": 347
+        },
+        "id": "0b59097e-c197-42d0-9ee5-728732355ee2",
+        "assertions": [
+          {
+            "assertion": "Status 400",
+            "skipped": false
+          },
+          {
+            "assertion": "Contrato de erro",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "a92ce719-240b-4674-a466-8b274d238d13",
+          "length": 11,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "3272d04c-d37f-4c6a-97d0-30e7eeff671f"
+        },
+        "item": {
+          "id": "bbe51c9b-8f44-478b-9bed-3c2af8193ae7",
+          "name": "05 - Supervisor - Listar Solicitacoes",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "solicitacoes-credito"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{supervisorUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Supervisor"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "solicitacoes-credito"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "22222222-2222-2222-2222-222222222222"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "fe0dd570-b6c2-4ab3-942c-0100ac77489a",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "edd9147a-25f8-4496-b42f-73b7c7d8e31d",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "db0f069d3f8d45b2942c3302c09138a2"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              91,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              98,
+              102,
+              97,
+              50,
+              56,
+              51,
+              52,
+              54,
+              45,
+              48,
+              57,
+              100,
+              49,
+              45,
+              52,
+              50,
+              48,
+              49,
+              45,
+              57,
+              102,
+              97,
+              98,
+              45,
+              57,
+              49,
+              49,
+              51,
+              57,
+              49,
+              50,
+              52,
+              51,
+              97,
+              54,
+              51,
+              34,
+              44,
+              34,
+              99,
+              108,
+              105,
+              101,
+              110,
+              116,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              34,
+              44,
+              34,
+              118,
+              97,
+              108,
+              111,
+              114,
+              83,
+              111,
+              108,
+              105,
+              99,
+              105,
+              116,
+              97,
+              100,
+              111,
+              34,
+              58,
+              50,
+              53,
+              48,
+              48,
+              44,
+              34,
+              113,
+              117,
+              97,
+              110,
+              116,
+              105,
+              100,
+              97,
+              100,
+              101,
+              80,
+              97,
+              114,
+              99,
+              101,
+              108,
+              97,
+              115,
+              83,
+              111,
+              108,
+              105,
+              99,
+              105,
+              116,
+              97,
+              100,
+              97,
+              34,
+              58,
+              54,
+              44,
+              34,
+              102,
+              105,
+              110,
+              97,
+              108,
+              105,
+              100,
+              97,
+              100,
+              101,
+              34,
+              58,
+              34,
+              82,
+              101,
+              110,
+              101,
+              103,
+              111,
+              99,
+              105,
+              97,
+              99,
+              97,
+              111,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              80,
+              101,
+              110,
+              100,
+              101,
+              110,
+              116,
+              101,
+              34,
+              44,
+              34,
+              109,
+              111,
+              116,
+              105,
+              118,
+              111,
+              68,
+              101,
+              99,
+              105,
+              115,
+              97,
+              111,
+              34,
+              58,
+              110,
+              117,
+              108,
+              108,
+              44,
+              34,
+              99,
+              114,
+              105,
+              97,
+              100,
+              111,
+              69,
+              109,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              52,
+              45,
+              50,
+              48,
+              84,
+              49,
+              56,
+              58,
+              51,
+              48,
+              58,
+              48,
+              48,
+              46,
+              49,
+              55,
+              53,
+              57,
+              57,
+              56,
+              57,
+              90,
+              34,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              55,
+              53,
+              54,
+              57,
+              53,
+              54,
+              48,
+              99,
+              45,
+              48,
+              57,
+              50,
+              98,
+              45,
+              52,
+              51,
+              98,
+              48,
+              45,
+              97,
+              97,
+              99,
+              56,
+              45,
+              99,
+              54,
+              57,
+              101,
+              51,
+              50,
+              100,
+              49,
+              49,
+              57,
+              48,
+              98,
+              34,
+              44,
+              34,
+              99,
+              108,
+              105,
+              101,
+              110,
+              116,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              34,
+              44,
+              34,
+              118,
+              97,
+              108,
+              111,
+              114,
+              83,
+              111,
+              108,
+              105,
+              99,
+              105,
+              116,
+              97,
+              100,
+              111,
+              34,
+              58,
+              50,
+              53,
+              48,
+              48,
+              44,
+              34,
+              113,
+              117,
+              97,
+              110,
+              116,
+              105,
+              100,
+              97,
+              100,
+              101,
+              80,
+              97,
+              114,
+              99,
+              101,
+              108,
+              97,
+              115,
+              83,
+              111,
+              108,
+              105,
+              99,
+              105,
+              116,
+              97,
+              100,
+              97,
+              34,
+              58,
+              54,
+              44,
+              34,
+              102,
+              105,
+              110,
+              97,
+              108,
+              105,
+              100,
+              97,
+              100,
+              101,
+              34,
+              58,
+              34,
+              82,
+              101,
+              110,
+              101,
+              103,
+              111,
+              99,
+              105,
+              97,
+              99,
+              97,
+              111,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              80,
+              101,
+              110,
+              100,
+              101,
+              110,
+              116,
+              101,
+              34,
+              44,
+              34,
+              109,
+              111,
+              116,
+              105,
+              118,
+              111,
+              68,
+              101,
+              99,
+              105,
+              115,
+              97,
+              111,
+              34,
+              58,
+              110,
+              117,
+              108,
+              108,
+              44,
+              34,
+              99,
+              114,
+              105,
+              97,
+              100,
+              111,
+              69,
+              109,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              52,
+              45,
+              50,
+              48,
+              84,
+              49,
+              56,
+              58,
+              50,
+              57,
+              58,
+              48,
+              48,
+              46,
+              51,
+              50,
+              50,
+              51,
+              57,
+              50,
+              57,
+              90,
+              34,
+              125,
+              93
+            ]
+          },
+          "cookie": [],
+          "responseTime": 6,
+          "responseSize": 529
+        },
+        "id": "bbe51c9b-8f44-478b-9bed-3c2af8193ae7"
+      },
+      {
+        "cursor": {
+          "ref": "335f1616-7a1b-4acc-ad27-e99efddd26d1",
+          "length": 11,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "37081407-1345-4655-8036-641f8a418686"
+        },
+        "item": {
+          "id": "be51ae24-e325-41e0-902a-09d0e25cf5cd",
+          "name": "06 - Supervisor - Aprovar Solicitacao",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "solicitacoes-credito",
+                "{{solicitacaoId}}",
+                "decisao"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{supervisorUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Supervisor"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"aprovar\": true,\n  \"motivo\": \"Aprovado para cenario de teste\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "solicitacoes-credito",
+              "bfa28346-09d1-4201-9fab-911391243a63",
+              "decisao"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "22222222-2222-2222-2222-222222222222"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "4a403236-3956-4de6-b8a9-c5567edf8667",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "67",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"aprovar\": true,\n  \"motivo\": \"Aprovado para cenario de teste\"\n}"
+          }
+        },
+        "response": {
+          "id": "409163aa-8a05-4bab-97f5-8f6aa1638dce",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "57048de637814bcb97006c46700984d4"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              98,
+              102,
+              97,
+              50,
+              56,
+              51,
+              52,
+              54,
+              45,
+              48,
+              57,
+              100,
+              49,
+              45,
+              52,
+              50,
+              48,
+              49,
+              45,
+              57,
+              102,
+              97,
+              98,
+              45,
+              57,
+              49,
+              49,
+              51,
+              57,
+              49,
+              50,
+              52,
+              51,
+              97,
+              54,
+              51,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              65,
+              112,
+              114,
+              111,
+              118,
+              97,
+              100,
+              97,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 51,
+          "responseSize": 65
+        },
+        "id": "be51ae24-e325-41e0-902a-09d0e25cf5cd"
+      },
+      {
+        "cursor": {
+          "ref": "83e21d5b-dd10-4359-bec2-7af64e1e7cf4",
+          "length": 11,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "cecee5bc-ee69-40fa-8b2b-6dc50c54c3d9"
+        },
+        "item": {
+          "id": "b22cd934-d1bf-455c-a06f-9994e02a0662",
+          "name": "07 - Cliente - Listar Contratos",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "contratos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{clienteUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Cliente"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "3ea3ef39-9d54-44af-b539-682edfca505a",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "var lista = pm.response.json();",
+                  "if (Array.isArray(lista) && lista.length > 0) {",
+                  "  pm.environment.set(\"contratoId\", lista[0].id);",
+                  "}"
+                ],
+                "_lastExecutionId": "38269fb6-4ba2-4d84-abcf-6fb9dc3fa19c"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "contratos"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "11111111-1111-1111-1111-111111111111"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "d7e43f62-7595-48cb-ac59-dee22802b09b",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "2309bca5-e8b4-4823-9969-211b369b59d8",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "060ab241b48e48528207a5d08c45b214"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              91,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              101,
+              55,
+              50,
+              97,
+              57,
+              99,
+              52,
+              50,
+              45,
+              102,
+              56,
+              99,
+              100,
+              45,
+              52,
+              101,
+              50,
+              49,
+              45,
+              57,
+              56,
+              54,
+              54,
+              45,
+              98,
+              51,
+              99,
+              102,
+              50,
+              57,
+              51,
+              54,
+              57,
+              55,
+              97,
+              53,
+              34,
+              44,
+              34,
+              99,
+              108,
+              105,
+              101,
+              110,
+              116,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              34,
+              44,
+              34,
+              110,
+              117,
+              109,
+              101,
+              114,
+              111,
+              67,
+              111,
+              110,
+              116,
+              114,
+              97,
+              116,
+              111,
+              34,
+              58,
+              34,
+              67,
+              84,
+              82,
+              45,
+              50,
+              48,
+              50,
+              54,
+              48,
+              52,
+              50,
+              48,
+              45,
+              48,
+              48,
+              48,
+              49,
+              34,
+              44,
+              34,
+              118,
+              97,
+              108,
+              111,
+              114,
+              80,
+              114,
+              105,
+              110,
+              99,
+              105,
+              112,
+              97,
+              108,
+              34,
+              58,
+              51,
+              53,
+              48,
+              48,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              65,
+              116,
+              105,
+              118,
+              111,
+              34,
+              44,
+              34,
+              113,
+              117,
+              97,
+              110,
+              116,
+              105,
+              100,
+              97,
+              100,
+              101,
+              80,
+              97,
+              114,
+              99,
+              101,
+              108,
+              97,
+              115,
+              65,
+              98,
+              101,
+              114,
+              116,
+              97,
+              115,
+              34,
+              58,
+              50,
+              125,
+              44,
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              98,
+              97,
+              97,
+              50,
+              50,
+              48,
+              99,
+              55,
+              45,
+              48,
+              50,
+              50,
+              55,
+              45,
+              52,
+              97,
+              48,
+              49,
+              45,
+              97,
+              98,
+              51,
+              102,
+              45,
+              101,
+              50,
+              100,
+              56,
+              98,
+              51,
+              100,
+              99,
+              52,
+              53,
+              49,
+              98,
+              34,
+              44,
+              34,
+              99,
+              108,
+              105,
+              101,
+              110,
+              116,
+              101,
+              73,
+              100,
+              34,
+              58,
+              34,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              45,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              49,
+              34,
+              44,
+              34,
+              110,
+              117,
+              109,
+              101,
+              114,
+              111,
+              67,
+              111,
+              110,
+              116,
+              114,
+              97,
+              116,
+              111,
+              34,
+              58,
+              34,
+              67,
+              84,
+              82,
+              45,
+              50,
+              48,
+              50,
+              54,
+              48,
+              52,
+              50,
+              48,
+              45,
+              51,
+              54,
+              57,
+              52,
+              34,
+              44,
+              34,
+              118,
+              97,
+              108,
+              111,
+              114,
+              80,
+              114,
+              105,
+              110,
+              99,
+              105,
+              112,
+              97,
+              108,
+              34,
+              58,
+              50,
+              53,
+              48,
+              48,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              65,
+              116,
+              105,
+              118,
+              111,
+              34,
+              44,
+              34,
+              113,
+              117,
+              97,
+              110,
+              116,
+              105,
+              100,
+              97,
+              100,
+              101,
+              80,
+              97,
+              114,
+              99,
+              101,
+              108,
+              97,
+              115,
+              65,
+              98,
+              101,
+              114,
+              116,
+              97,
+              115,
+              34,
+              58,
+              54,
+              125,
+              93
+            ]
+          },
+          "cookie": [],
+          "responseTime": 5,
+          "responseSize": 407
+        },
+        "id": "b22cd934-d1bf-455c-a06f-9994e02a0662",
+        "assertions": [
+          {
+            "assertion": "Status 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "b490d1e3-a493-4c01-bf2a-5a24232bef5f",
+          "length": 11,
+          "cycles": 1,
+          "position": 7,
+          "iteration": 0,
+          "httpRequestId": "52ce9ad0-580e-4b76-b404-5709d93e64a2"
+        },
+        "item": {
+          "id": "f85e8681-7185-4a00-b2fb-3f4824b7164e",
+          "name": "08 - Cliente - Consultar Saldo Devedor",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "contratos",
+                "{{contratoId}}",
+                "saldo-devedor"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{clienteUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Cliente"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "contratos",
+              "e72a9c42-f8cd-4e21-9866-b3cf293697a5",
+              "saldo-devedor"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "11111111-1111-1111-1111-111111111111"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "242c9e42-4eaa-4458-8e41-58ed7ef029d5",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "fbc63fb4-19b6-4a7c-ae25-51104d191f2a",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "763293fa765047fda5afeca3da9037c3"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              111,
+              110,
+              116,
+              114,
+              97,
+              116,
+              111,
+              73,
+              100,
+              34,
+              58,
+              34,
+              101,
+              55,
+              50,
+              97,
+              57,
+              99,
+              52,
+              50,
+              45,
+              102,
+              56,
+              99,
+              100,
+              45,
+              52,
+              101,
+              50,
+              49,
+              45,
+              57,
+              56,
+              54,
+              54,
+              45,
+              98,
+              51,
+              99,
+              102,
+              50,
+              57,
+              51,
+              54,
+              57,
+              55,
+              97,
+              53,
+              34,
+              44,
+              34,
+              110,
+              117,
+              109,
+              101,
+              114,
+              111,
+              67,
+              111,
+              110,
+              116,
+              114,
+              97,
+              116,
+              111,
+              34,
+              58,
+              34,
+              67,
+              84,
+              82,
+              45,
+              50,
+              48,
+              50,
+              54,
+              48,
+              52,
+              50,
+              48,
+              45,
+              48,
+              48,
+              48,
+              49,
+              34,
+              44,
+              34,
+              112,
+              114,
+              105,
+              110,
+              99,
+              105,
+              112,
+              97,
+              108,
+              34,
+              58,
+              49,
+              50,
+              48,
+              48,
+              44,
+              34,
+              106,
+              117,
+              114,
+              111,
+              115,
+              34,
+              58,
+              57,
+              48,
+              44,
+              34,
+              109,
+              117,
+              108,
+              116,
+              97,
+              34,
+              58,
+              48,
+              44,
+              34,
+              116,
+              111,
+              116,
+              97,
+              108,
+              34,
+              58,
+              49,
+              50,
+              57,
+              48,
+              44,
+              34,
+              99,
+              97,
+              108,
+              99,
+              117,
+              108,
+              97,
+              100,
+              111,
+              69,
+              109,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              54,
+              45,
+              48,
+              52,
+              45,
+              50,
+              48,
+              84,
+              49,
+              56,
+              58,
+              51,
+              48,
+              58,
+              48,
+              48,
+              46,
+              51,
+              51,
+              52,
+              50,
+              50,
+              51,
+              90,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 28,
+          "responseSize": 185
+        },
+        "id": "f85e8681-7185-4a00-b2fb-3f4824b7164e"
+      },
+      {
+        "cursor": {
+          "ref": "22effac7-c2a7-425a-bb8c-9b3f773a34f7",
+          "length": 11,
+          "cycles": 1,
+          "position": 8,
+          "iteration": 0,
+          "httpRequestId": "d6b01678-d504-4fc5-9b54-65b3f60ff584"
+        },
+        "item": {
+          "id": "e0bb1819-c3a2-49c7-bf53-5540514ae39d",
+          "name": "09 - Supervisor - Criar Acordo",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "contratos",
+                "{{contratoId}}",
+                "acordos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{supervisorUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Supervisor"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valorDesconto\": 100,\n  \"quantidadeParcelas\": 4\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "ed9fa4b3-43df-43fb-bffd-a251f9bae7fd",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "var acordo = pm.response.json();",
+                  "if (acordo && acordo.id) {",
+                  "  pm.environment.set(\"acordoId\", acordo.id);",
+                  "}"
+                ],
+                "_lastExecutionId": "17f796f3-f1c4-477f-a0a2-990f08a1ccee"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "contratos",
+              "e72a9c42-f8cd-4e21-9866-b3cf293697a5",
+              "acordos"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "X-User-Id",
+              "value": "22222222-2222-2222-2222-222222222222"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "3e776ca0-f153-4485-83b2-f2dfa47cf651",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "53",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"valorDesconto\": 100,\n  \"quantidadeParcelas\": 4\n}"
+          }
+        },
+        "response": {
+          "id": "bf0ad064-1b64-4973-a124-acfecb461b05",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "820c62277d3d47c0950d456506171fbc"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              100,
+              34,
+              58,
+              34,
+              55,
+              53,
+              53,
+              97,
+              100,
+              98,
+              57,
+              51,
+              45,
+              52,
+              56,
+              101,
+              55,
+              45,
+              52,
+              57,
+              57,
+              56,
+              45,
+              57,
+              99,
+              57,
+              56,
+              45,
+              54,
+              98,
+              97,
+              101,
+              55,
+              57,
+              54,
+              101,
+              56,
+              54,
+              54,
+              51,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 44,
+          "responseSize": 45
+        },
+        "id": "e0bb1819-c3a2-49c7-bf53-5540514ae39d",
+        "assertions": [
+          {
+            "assertion": "Status 200",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "c88cbf54-99e2-428d-8e36-07e69419833f",
+          "length": 11,
+          "cycles": 1,
+          "position": 9,
+          "iteration": 0,
+          "httpRequestId": "adc7a80b-2a13-45bf-9b76-f073d48e957f"
+        },
+        "item": {
+          "id": "f7017458-5fc7-4eaf-b6a6-d472f7acd1fb",
+          "name": "10 - Supervisor - Emitir Boleto (informe parcelaAcordoId)",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "acordos",
+                "{{parcelaAcordoId}}",
+                "boleto"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{supervisorUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Supervisor"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "860fdd73-0512-4296-b623-a9d3f1f04e95",
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.environment.get(\"parcelaAcordoId\")) {",
+                  "  pm.test(\"parcelaAcordoId pendente\", function () {",
+                  "    pm.expect(true).to.eql(true);",
+                  "  });",
+                  "} else {",
+                  "  pm.test(\"Status 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "  });",
+                  "  var boleto = pm.response.json();",
+                  "  if (boleto && boleto.id) {",
+                  "    pm.environment.set(\"boletoId\", boleto.id);",
+                  "  }",
+                  "}"
+                ],
+                "_lastExecutionId": "2b3a3abf-265d-4515-9c1e-f2ed7268e7ed"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "acordos",
+              "",
+              "boleto"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "22222222-2222-2222-2222-222222222222"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Supervisor"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "06a24ad2-833d-4b06-ab91-361ae1c0819e",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "0",
+              "system": true
+            }
+          ],
+          "method": "POST"
+        },
+        "response": {
+          "id": "80db8e3e-3e15-4cc3-b3eb-831646579d79",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "de162c51ea0b42c385c8790db9ab40fb"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": []
+          },
+          "cookie": [],
+          "responseTime": 2,
+          "responseSize": 0
+        },
+        "id": "f7017458-5fc7-4eaf-b6a6-d472f7acd1fb",
+        "assertions": [
+          {
+            "assertion": "parcelaAcordoId pendente",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "a6992fb0-2d7c-491b-8fb0-5edf34c4c24f",
+          "length": 11,
+          "cycles": 1,
+          "position": 10,
+          "iteration": 0,
+          "httpRequestId": "c815935f-c01e-48cf-9e83-747882c09b68"
+        },
+        "item": {
+          "id": "314a4476-67f1-46f2-a71a-78b8eaee48f1",
+          "name": "11 - Cliente - Download Boleto PDF",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "boletos",
+                "{{boletoId}}",
+                "pdf"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{clienteUserId}}"
+              },
+              {
+                "key": "X-User-Role",
+                "value": "Cliente"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "url": {
+            "protocol": "http",
+            "port": "5119",
+            "path": [
+              "api",
+              "boletos",
+              "",
+              "pdf"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-User-Id",
+              "value": "11111111-1111-1111-1111-111111111111"
+            },
+            {
+              "key": "X-User-Role",
+              "value": "Cliente"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "272f4663-e9c7-465f-9c5c-95c0fe9283f2",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:5119",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "c75b4ff1-5602-42a4-90c4-a9b3d8918dfc",
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 20 Apr 2026 18:30:00 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Kestrel"
+            },
+            {
+              "key": "X-Correlation-Id",
+              "value": "491f02c257f240058be01a18a00e4bed"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": []
+          },
+          "cookie": [],
+          "responseTime": 3,
+          "responseSize": 0
+        },
+        "id": "314a4476-67f1-46f2-a71a-78b8eaee48f1"
+      }
+    ],
+    "transfers": {
+      "responseTotal": 1818
+    },
+    "failures": [],
+    "error": null
+  }
+}

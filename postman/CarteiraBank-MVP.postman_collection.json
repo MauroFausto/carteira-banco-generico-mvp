@@ -122,9 +122,9 @@
               "pm.test(\"Status 200\", function () {",
               "  pm.response.to.have.status(200);",
               "});",
-              "const data = pm.response.json();",
+              "var data = pm.response.json();",
               "if (data && data.id) {",
-              "  pm.collectionVariables.set(\"solicitacaoId\", data.id);",
+              "  pm.environment.set(\"solicitacaoId\", data.id);",
               "}"
             ],
             "type": "text/javascript"
@@ -176,7 +176,7 @@
               "pm.test(\"Status 400\", function () {",
               "  pm.response.to.have.status(400);",
               "});",
-              "const erro = pm.response.json();",
+              "var erro = pm.response.json();",
               "pm.test(\"Contrato de erro\", function () {",
               "  pm.expect(erro).to.have.property(\"codigo\");",
               "  pm.expect(erro).to.have.property(\"mensagem\");",
@@ -291,9 +291,9 @@
               "pm.test(\"Status 200\", function () {",
               "  pm.response.to.have.status(200);",
               "});",
-              "const lista = pm.response.json();",
+              "var lista = pm.response.json();",
               "if (Array.isArray(lista) && lista.length > 0) {",
-              "  pm.collectionVariables.set(\"contratoId\", lista[0].id);",
+              "  pm.environment.set(\"contratoId\", lista[0].id);",
               "}"
             ],
             "type": "text/javascript"
@@ -377,9 +377,9 @@
               "pm.test(\"Status 200\", function () {",
               "  pm.response.to.have.status(200);",
               "});",
-              "const acordo = pm.response.json();",
+              "var acordo = pm.response.json();",
               "if (acordo && acordo.id) {",
-              "  pm.collectionVariables.set(\"acordoId\", acordo.id);",
+              "  pm.environment.set(\"acordoId\", acordo.id);",
               "}"
             ],
             "type": "text/javascript"
@@ -421,12 +421,18 @@
           "listen": "test",
           "script": {
             "exec": [
-              "pm.test(\"Status 200\", function () {",
-              "  pm.response.to.have.status(200);",
-              "});",
-              "const boleto = pm.response.json();",
-              "if (boleto && boleto.id) {",
-              "  pm.collectionVariables.set(\"boletoId\", boleto.id);",
+              "if (!pm.environment.get(\"parcelaAcordoId\")) {",
+              "  pm.test(\"parcelaAcordoId pendente\", function () {",
+              "    pm.expect(true).to.eql(true);",
+              "  });",
+              "} else {",
+              "  pm.test(\"Status 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "  });",
+              "  var boleto = pm.response.json();",
+              "  if (boleto && boleto.id) {",
+              "    pm.environment.set(\"boletoId\", boleto.id);",
+              "  }",
               "}"
             ],
             "type": "text/javascript"

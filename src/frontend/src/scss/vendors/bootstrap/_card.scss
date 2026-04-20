@@ -1,0 +1,46 @@
+.card {
+	//
+	isolation: isolate;
+
+	&:before {
+		content: "";
+		z-index: -1;
+		inset: 0;
+		backdrop-filter: blur(var(--bs-backdrop-blur));
+		position: absolute;
+		border-radius: $card-border-radius;
+	}
+}
+
+.card-title {
+	font-weight: $font-weight-medium;
+	margin-top: -0.1rem;
+
+	&:not([class*="fs-"]) {
+		font-size: $font-size-base;
+	}
+}
+
+.card-subtitle {
+	font-weight: normal;
+	color: $text-color;
+	line-height: 1.5;
+	font-size: $font-size-base;
+}
+
+.card-header {
+	.card-header-pills {
+		gap: 1px;
+		margin-left: -0.5rem;
+	}
+}
+
+.card-hover {
+	transition:
+		background-color 200ms,
+		border-color 200ms;
+
+	&:hover {
+		background-color: rgba(var(--bs-tertiary-rgb), 0.25);
+	}
+}

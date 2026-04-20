@@ -1,0 +1,156 @@
+.datatable-top {
+	display: flex;
+	align-items: flex-start;
+	margin-bottom: 1rem;
+}
+
+.datatable-dropdown {
+	& > label {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-shrink: 0;
+		white-space: nowrap;
+	}
+
+	@include media-breakpoint-down(sm) {
+		display: none;
+	}
+}
+
+.datatable-search {
+	margin-left: auto;
+	position: relative;
+	display: flex;
+
+	@include media-breakpoint-down(sm) {
+		width: 100%;
+	}
+
+	&:before {
+		@include font-icon("\E30C", 0.9rem);
+		position: absolute;
+		left: 0.75rem;
+		top: 0.65rem;
+	}
+
+	.datatable-input {
+		padding-left: 2.25rem;
+	}
+}
+
+.datatable-input,
+.datatable-selector {
+	@extend .form-control;
+}
+
+.datatable-dropdown {
+	position: relative;
+
+	&:after {
+		@include font-icon("\E136", 0.75rem);
+		position: absolute;
+		top: 0.7rem;
+		left: 2.5rem;
+	}
+}
+
+.datatable-selector {
+	padding-right: 2.25rem;
+
+	option {
+		opacity: 1;
+		color: $black;
+	}
+}
+
+.datatable-table {
+	th {
+		position: relative;
+
+		&:has(.datatable-sorter) {
+			padding: 0;
+		}
+
+		.datatable-sorter {
+			padding: 0.5rem;
+			width: 100%;
+		}
+
+		&:after {
+			position: absolute;
+			top: 0.6rem;
+			right: 0.5rem;
+		}
+
+		&.datatable-ascending {
+			&:after {
+				@include font-icon("\E136", 0.65rem);
+			}
+		}
+
+		&.datatable-descending {
+			&:after {
+				@include font-icon("\E13C", 0.65rem);
+			}
+		}
+	}
+}
+
+.datatable-pagination-list {
+	display: inline-flex;
+	align-items: center;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	gap: 1px;
+
+	& > li {
+		@include media-breakpoint-down(sm) {
+			&:not(:first-child):not(:last-child) {
+				display: none;
+			}
+		}
+	}
+
+	.datatable-pagination-list-item-link {
+		height: 2rem;
+		min-width: 2rem;
+		display: grid;
+		place-content: center;
+		border-radius: $border-radius;
+
+		&:hover {
+			background-color: $component-hover-bg;
+		}
+	}
+}
+
+.datatable-pagination-list-item {
+	&.datatable-disabled {
+		pointer-events: none;
+		opacity: 0.25;
+	}
+
+	&.datatable-active {
+		.datatable-pagination-list-item-link {
+			background-color: $component-hover-inverse-bg;
+		}
+	}
+
+	&.datatable-ellipsis {
+		padding-bottom: 0.3rem;
+	}
+}
+
+.datatable-pagination,
+.datatable-bottom {
+	text-align: center;
+}
+
+.datatable-info {
+	color: $text-muted;
+	font-weight: normal;
+	margin-bottom: 1rem;
+	font-size: $font-size-sm;
+}

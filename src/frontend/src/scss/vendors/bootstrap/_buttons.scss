@@ -1,0 +1,79 @@
+button {
+	border: 0;
+	padding: 0;
+	text-align: left;
+	background-color: transparent;
+	color: $text-color;
+
+	&:focus,
+	&:active {
+		outline: none;
+		box-shadow: none;
+	}
+}
+
+.btn-action {
+	--bs-btn-border-radius: #{$border-radius};
+	--bs-btn-font-size: 0.75rem;
+	--bs-btn-padding-y: 0.3rem;
+	--bs-btn-padding-x: 0.7rem;
+	--bs-btn-border-color: rgba(var(--bs-highlight-text-rgb), 0.5);
+	--bs-btn-color: rgb(var(--bs-highlight-text-rgb));
+	--bs-btn-hover-color: rgb(var(--bs-highlight-text-rgb));
+	--bs-btn-hover-border-color: rgba(var(--bs-highlight-text-rgb), 1);
+	--bs-btn-active-color: rgb(var(--bs-highlight-text-rgb));
+	--bs-btn-active-border-color: rgba(var(--bs-highlight-text-rgb), 1);
+
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	& > .ph {
+		font-size: 1rem;
+		margin-right: 0.5rem;
+	}
+}
+
+.btn {
+	.badge {
+		--bs-badge-border-radius: #{$border-radius-sm};
+		--bs-badge-padding-x: 0.25rem;
+		--bs-badge-padding-y: 0;
+
+		min-width: 1.3rem;
+		height: 1.3rem;
+		display: inline-grid;
+		place-content: center;
+		line-height: 1;
+		top: 0;
+	}
+}
+
+.btn-secondary {
+	--bs-btn-bg: rgba(var(--bs-tertiary-rgb), 0.25);
+	--bs-btn-hover-bg: rgba(var(--bs-tertiary-rgb), 0.5);
+	--bs-btn-color: #{$emphasis-color};
+	--bs-btn-hover-color: #{$emphasis-color};
+	--bs-btn-border-color: transparent;
+	--bs-btn-hover-border-color: transparent;
+	--bs-btn-disabled-bg: rgba(var(--bs-tertiary-rgb), 0.2);
+	--bs-btn-disabled-color: #{$secondary-color};
+	--bs-btn-disabled-border-color: transparent;
+	--bs-btn-active-bg: rgba(var(--bs-tertiary-rgb), 0.6);
+	--bs-btn-active-border-color: transparent;
+	--bs-btn-active-color: #{$emphasis-color};
+}
+
+.btn-outline-secondary {
+	--bs-btn-hover-bg: rgba(var(--bs-tertiary-rgb), 0.25);
+	--bs-btn-color: #{$emphasis-color};
+	--bs-btn-hover-color: #{$emphasis-color};
+	--bs-btn-border-color: rgba(var(--bs-tertiary-rgb), 0.25);
+	--bs-btn-hover-border-color: transparent;
+	--bs-btn-disabled-bg: rgba(var(--bs-tertiary-rgb), 0.2);
+	--bs-btn-disabled-color: #{$secondary-color};
+	--bs-btn-disabled-border-color: transparent;
+	--bs-btn-active-bg: rgba(var(--bs-tertiary-rgb), 0.35);
+	--bs-btn-active-border-color: transparent;
+	--bs-btn-active-color: #{$emphasis-color};
+}
