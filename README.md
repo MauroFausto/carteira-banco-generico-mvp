@@ -125,3 +125,49 @@ Logs locais da aplicacao:
 Arquivos prontos:
 - `postman/CarteiraBank-MVP.postman_collection.json`
 - `postman/CarteiraBank-MVP.local.postman_environment.json`
+
+## 5) Orquestracao local: Grafana + Loki + Modulo da Aplicacao + PGSQL dedicado
+
+Foi adicionada uma stack de orquestracao para execucao local do modulo atual em:
+- `docker-compose.modulo.yml`
+
+Arquivos de apoio:
+- `ops/loki/local-config.yaml`
+- `ops/grafana/provisioning/datasources/datasource.yml`
+
+### 5.1 Subir a stack
+
+```bash
+docker compose -f docker-compose.modulo.yml up -d --build
+```
+
+### 5.2 Servicos expostos
+
+- Aplicacao (modulo): `http://localhost:5099`
+- Health API: `http://localhost:5099/api/health`
+- PostgreSQL dedicado do modulo: `localhost:5432`
+- Loki: `http://localhost:3100`
+- Grafana: `http://localhost:3000` (usuario `admin`, senha `admin`)
+
+### 5.3 Logs centralizados no Grafana
+
+1. Acesse o Grafana.
+2. Abra **Explore**.
+3. Selecione o datasource **Loki** (provisionado automaticamente).
+4. Consulte com uma query inicial, por exemplo:
+
+```logql
+{app="carteira-bank-api"}
+```
+
+### 5.4 Derrubar a stack
+
+```bash
+docker compose -f docker-compose.modulo.yml down
+```
+
+Para remover tambem os volumes persistentes:
+
+```bash
+docker compose -f docker-compose.modulo.yml down -v
+```
