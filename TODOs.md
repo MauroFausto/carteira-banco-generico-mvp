@@ -4,6 +4,11 @@
   - 1 container de aplicacao por modulo (`Auth`, `Credito`, `Divida`, `Acordo`, `Boleto`, `Frontend`);
   - 1 instancia Grafana + Loki para centralizacao de logs;
   - 1 container PostgreSQL por modulo (isolamento de dados).
+- [x] Definir estrategia de versionamento Git para o projeto:
+  - trunk-based com `master` como trunk;
+  - uso de Conventional Commits.
+- [x] Configurar Commitizen no repositorio com `.cz.toml`.
+- [x] Documentar fluxo de commits e versionamento em `docs/versionamento-git.md`.
 - [x] Criar stack base de orquestracao local (`docker-compose.modulo.yml`) para:
   - modulo da aplicacao;
   - PGSQL dedicado do modulo;

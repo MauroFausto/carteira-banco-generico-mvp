@@ -171,3 +171,16 @@ Para remover tambem os volumes persistentes:
 ```bash
 docker compose -f docker-compose.modulo.yml down -v
 ```
+
+## 6) Fluxo de versionamento (Git)
+
+O projeto passa a seguir:
+- Trunk-based com branch principal `master`;
+- commits pequenos e frequentes;
+- padrao Conventional Commits com Commitizen.
+
+Guia completo:
+- `docs/versionamento-git.md`
+
+Configuracao do Commitizen no repo:
+- `.cz.toml`

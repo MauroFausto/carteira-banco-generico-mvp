@@ -20,3 +20,16 @@ Foram definidos volumes nomeados para persistencia de dados de PostgreSQL, Loki 
 - Atualizado `TODOs.md` com status do checkpoint atual.
 - Corrigido `docker-compose.modulo.yml` para volume do PostgreSQL 18.3 em `/var/lib/postgresql`;
 - Validada subida completa da stack e endpoint de health da aplicacao.
+
+## 2026-04-19 - 12:30
+- Organizacao da estrategia de versionamento antes da proxima fase de implementacao;
+- Definicao do fluxo trunk-based com `master` como trunk;
+- Configuracao inicial do Commitizen no repositorio via `.cz.toml`;
+- Documentacao do fluxo de commit e versionamento em `docs/versionamento-git.md`;
+- Atualizacao de `README.md` e `TODOs.md` para refletir o novo padrao de trabalho.
+
+--- TimeLine das mudancas no codigo/documentos ---
+- Criado `.cz.toml`;
+- Criado `docs/versionamento-git.md`;
+- Atualizado `README.md` com secao de fluxo Git;
+- Atualizado `TODOs.md` com checkpoint de versionamento.
